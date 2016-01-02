@@ -1,4 +1,6 @@
+var tongue;
 var flies;
+var fliesEaten = 0;
 
 function setup() {
   createCanvas(700, 500);
@@ -8,16 +10,34 @@ function setup() {
   // let p5js create it, then move it to where you want it.
   $('#sketchHolder').append($('#defaultCanvas0'));
 
+  tongue = createSprite(width/2, height/2, 70, 70);
   flies = new Group();
 
   for (var i = 0; i < 50; i++) {
-    var s = createSprite(random(width), random(height), 50, 50);
-    s.target = [random(width), random(height)];  // Yes! JS prototypes ftw.
-    flies.add(s);
+    addFlySprite();
   }
 }
 
+function addFlySprite() {
+  var s = createSprite(random(width), random(height), 15, 15);
+  s.target = [random(width), random(height)];  // Yes! JS prototypes ftw.
+  s.addAnimation("flapping", "imgs/fly1.png", "imgs/fly2.png");
+  flies.add(s);
+}
+
 function draw() {
+  // update game logic
+
+  if (frameCount % 10 == 0) {
+    if (flies.length < 30) {
+      for (var i = 0; i < 1; i++) {
+        addFlySprite();
+      }
+    }
+  }
+
+  // render logic
+
   background(255);
 
   for (var i = 0; i < flies.length; i++) {
@@ -31,7 +51,18 @@ function draw() {
     }
   }
 
+  tongue.position.set(mouseX, mouseY);
+  tongue.overlap(flies, eatAFly);
+
   drawSprites();
+
+  fill(0);
+  text(fliesEaten * 10, 20, 20);
+}
+
+function eatAFly(tongue, fly) {
+  fly.remove();
+  fliesEaten++;
 }
 
 function keyPressed() {
