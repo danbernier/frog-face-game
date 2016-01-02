@@ -1,3 +1,5 @@
+var flies;
+
 function setup() {
   createCanvas(700, 500);
 
@@ -5,9 +7,40 @@ function setup() {
   // This is the easiest/simplest way I've found to put your sketch canvas where you want it:
   // let p5js create it, then move it to where you want it.
   $('#sketchHolder').append($('#defaultCanvas0'));
-  stroke(30, 128);
+
+  flies = new Group();
+
+  for (var i = 0; i < 50; i++) {
+    var s = createSprite(random(width), random(height), 50, 50);
+    s.target = [random(width), random(height)];  // Yes! JS prototypes ftw.
+    flies.add(s);
+  }
 }
 
 function draw() {
-  ellipse(mouseX, mouseY, 30, 30);
+  background(255);
+
+  for (var i = 0; i < flies.length; i++) {
+    var s = flies[i];
+    s.setSpeed(3, s.getDirection() + 5);
+
+    s.attractionPoint(0.5, s.target[0], s.target[1]);
+
+    if (dist(s.target[0], s.target[1], s.position.x, s.position.y) < 30) {
+      s.target = [random(width), random(height)];
+    }
+  }
+
+  drawSprites();
+}
+
+function keyPressed() {
+  if (key == 'X') {
+    for (var i = 0; i < flies.length; i++) {
+      var s = flies[i];
+      var mag = dist(s.position.x, s.position.y, width/2, height/2);
+      s.attractionPoint(mag * 0.05, width/2, height/2);
+      s.maxSpeed = 5;
+    }
+  }
 }
