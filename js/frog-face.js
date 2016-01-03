@@ -74,5 +74,4 @@ function keyPressed() {
       s.maxSpeed = 5;
     }
   }
->>>>>>> 1bd45f0a44edc32253523d135a6fd1563e6338fb
 }
