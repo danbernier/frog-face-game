@@ -1,15 +1,19 @@
 var tongue;
 var flies;
 var fliesEaten = 0;
+var title;
 
 function setup() {
+  title = createDiv('<h1>FrogFace</h1><em>Because we all have an inner frog, hungry for flies. Right?</em>');
+  title.parent('frog-face');
+  
   createCanvas(700, 500);
 
   // p5js creates its own canvas, and doesn't seem willing to let you place your own.
   // This is the easiest/simplest way I've found to put your sketch canvas where you want it:
   // let p5js create it, then move it to where you want it.
-  $('#sketchHolder').append($('#defaultCanvas0'));
-
+  $('#frog-face').append($('#defaultCanvas0'));
+   
   tongue = createSprite(width/2, height/2, 70, 70);
   flies = new Group();
 
